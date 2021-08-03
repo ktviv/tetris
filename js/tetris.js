@@ -596,14 +596,14 @@ function gameSpeedTick() {
     currentPiece.moveDown();
 }
 
-draw();
+Promise.all(Array.from(document.images).filter(img => !img.complete).map(img => new Promise(resolve => { img.onload = img.onerror = resolve; }))).then(() => {
+    draw();
+});
+
 
 window.onkeydown = function(event) {
 
-    if (paused || gameOver) {
-
-        return;
-    } else if (event.keyCode === 37) { // arrow left
+    if (event.keyCode === 37) { // arrow left
 
         currentPiece.moveLeft();
     } else if (event.keyCode === 39) { // arrow right
@@ -612,33 +612,18 @@ window.onkeydown = function(event) {
     } else if (event.keyCode === 40) { // arrow down
 
         currentPiece.moveDown();
-    }
-}
+    } else if (event.keyCode === 90 || event.keyCode === 122) { //Z or z
 
-window.onkeypress = function(event) {
-
-    if (event.keyCode === 114 || event.keyCode === 82) { //r or R
+        currentPiece.rotate();
+    } else if (event.keyCode === 114 || event.keyCode === 82) { //r or R
 
         reset();
     } else if (event.keyCode === 112 || event.keyCode === 80) { //p or P
 
-            paused = !paused;
+        paused = !paused;
     }
-    if (paused || gameOver) {
-
-        return;
-    } else if (event.keyCode === 90 || event.keyCode === 122) { //Z or z
-
-        currentPiece.rotate();
-    } else if (event.keyCode === 65 || event.keyCode === 97) { //a or A
-
-        currentPiece.clear();
-        var index = Utils.nextTetrominoIndex();
-        currentPiece = TETROMINOS[index];
-        currentPiece.draw();
-    }
+    event.preventDefault();
 }
-
 
 
 
