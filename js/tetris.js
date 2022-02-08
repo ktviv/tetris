@@ -38,6 +38,7 @@ class Utils {
 
     static translateXY(xPos, yPos) {
 
+        console.log("Some change done!!!!")
         return Utils.translate(yPos, xPos, PLAY_FIELD_SCALE_FACTOR);
     }
 
